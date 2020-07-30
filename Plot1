@@ -1,0 +1,26 @@
+rm(list=ls())
+
+
+
+## Loading the data
+
+df <- read.csv("./household_power_consumption.txt", header=T, sep=';', na.strings="?")
+head(df)
+df$Date <- as.Date(df$Date, format="%d/%m/%Y")
+View(df)
+
+## Substing and converting the dates (datetime format)
+
+df2 <- subset(df, subset=(Date >= "2007-02-01" & Date <= "2007-02-02"))
+View(df2)
+
+date <- paste(as.Date(df2$Date), df2$Time)
+df2$Time <- as.POSIXct(date)
+
+
+
+## Creating the histogram and saving it to a file
+hist(df2$Global_active_power, main="Global Active Power", xlab="Global Active Power (kilowatts)", ylab="Frequency", col="Red")
+dev.copy(png, file="Plot1.png", height=410, width=410)
+dev.off()
+
